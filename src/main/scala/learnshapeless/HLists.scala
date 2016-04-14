@@ -33,30 +33,30 @@ object HLists extends App {
     (a) start the `sbt console`, and enter `:type learnshapeless.HLists.ex_newton`
     (b) if you are using Intellij, you can focus cursor on the expression and activate TypeInfo command (Ctrl-Shift-P on my Mac)
      */
-  def ex_newton = ???
+  def ex_newton = "Newton" :: 1642 :: England :: HNil
   println(s"ex_newton: $ex_newton")
 
   def eg_prependAndAppend: String :: String :: Int :: Country :: Discovery :: HNil = "Albert" +: eg1_einstein :+ TheoryOfRelativity
 
   /* Exercise : Prepend the String "Isaac" to `ex_newton` and append `Calculus` */
-  def ex_prependAndAppend = ???
+  def ex_prependAndAppend = "ex_newton" +: "Issac" :+ Calculus
   println(s"ex_prependAndAppend $ex_prependAndAppend")
 
 
   /** Shapeless makes the link between tuples and HLists clear by offering all HList methods over tuples with the import below*/
   import shapeless.syntax.std.tuple._
   /* Convert `ex_newton` into a tuple */
-  def ex_tuple: (String, Int, Country) = ???
+  def ex_tuple: (String, Int, Country) = ("Newton", 1642, England)
   println(s"ex_tuple $ex_tuple")
 
   /* Using operations available via `import syntax.std.tuple._`, append `Calculus` to `ex_tuple`  */
-  def ex_tuple_append = ???
+  def ex_tuple_append = ex_tuple :+ Calculus
   println(s"ex_tuple_append $ex_tuple_append")
 
   def eg_from_tuple = ("Einstein", 1879, Germany).productElements
 
   /* convert ex_tuple_append into an HList */
-  def ex_from_tuple = ???
+  def ex_from_tuple = ex_tuple_append.productElements
   println(s"ex_from_tuple $ex_from_tuple")
 
 
@@ -74,25 +74,27 @@ object HLists extends App {
 
   /* Apply a Poly1 mapping over `ex_newton` that converts the name to ALLCAPS, and leaves other fields unchanged
    * Return resulting HList */
-  def ex_poly = ???
+  object CapPoly extends DefaultIdentityMapping {
+    implicit def caps = at[String](_.toUpperCase)
+  }
+  def ex_poly = eg1_einstein.map(CapPoly)
   println(s"ex_poly: $ex_poly")
 
 
 
   /* Note how exact type of element 2 is returned */
-  def eg_index: Country = eg1_einstein(2)
-
+  def eg_index = eg1_einstein(2)
   /* Exercise: what happen if you try to index an HList outside it bounds? Try accessing the 4th element of `eg1_einstein` */
-  def ex_indexOutOfBounds = ???
+  //def ex_indexOutOfBounds = eg1_einstein(4)
 
 
   def eg_mapped_by_index = eg1_einstein.updateAtWith(2)(_ == Australia)
-
+  println(eg_mapped_by_index)
   /* Transform the surname field in `ex_newton` to the first name by looking it up in `Data.scientistsFirstNames`.
   Because `Data.scientistsFirstNames` is a `Map`, it can be passed as a function K => V
   * Use updateAtWith to identify the field by numeric index rather than y type.
   * `updateAtWith` returns the old value, and the updated HList in a tuple */
-  def ex_to_firstname_by_index: (String, HList) = ???
+  def ex_to_firstname_by_index: (String, HList) = ex_newton.updateAtWith(0)(Data.scientistsFirstNames)
   println(s"ex_to_firstname_by_index $ex_to_firstname_by_index")
 
 }
