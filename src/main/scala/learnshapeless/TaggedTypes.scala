@@ -53,6 +53,6 @@ object TaggedTypes extends App {
   def eg_ShouldntCompileWrongData = illTyped("""EgTypedPerson(ex_name, eg_id, ex_numberChildren, ex_age)""")
 
   /** Create a typed person instance correctly passing tagged values `eg_id`, `ex_name`, ` ex_age`, `ex_numberChildren` */
-  def ex_TypedPerson = EgTypedPerson(ex_name, eg_id, ex_numberChildren, ex_age)
+  def ex_TypedPerson = EgTypedPerson(eg_id, ex_name, ex_age, ex_numberChildren)
 
 }
